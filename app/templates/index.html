@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<h1>手写数字识别</h1>
+<hr>
+<div>
+    <canvas id="draw"></canvas>
+    <br/>
+    <button id="clear">清空</button>
+    <button id="submit">提交</button>
+    <script src="{{ url_for('static', filename='js/draw.js') }}"></script>
+</div>
+<br/>
+<div>
+    <form action="/recognize" method="post" enctype="multipart/form-data">
+        <input type="file" id="file" name="file" />
+        <input type="submit" value="上传文件" />
+    </form>
+</div>
+</body>
+</html>
