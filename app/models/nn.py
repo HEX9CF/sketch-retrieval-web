@@ -1,7 +1,8 @@
 import torch
 import torchvision.transforms as transforms
-from torch import nn
+import matplotlib.pyplot as plt
 from PIL import Image
+from torch import nn
 
 class NN(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
@@ -16,21 +17,45 @@ class NN(nn.Module):
         out = self.fc2(out)
         return out
 
-    def predict(self, x):
-        self.eval()
-        with torch.no_grad():
-            output = self.forward(x)
-            return torch.argmax(output.data, 1)
+transform = transforms.Compose([
+    transforms.Grayscale(),
+    transforms.Resize((28, 28)),
+    transforms.ToTensor(),
+])
 
+def load_image(image_path):
+    image = Image.open(image_path)
+    # plt.imshow(image)
+    # plt.show()
+
+    image = transform(image)
+    image = image.view(1, -1)
+
+    return image
+
+def predict(model, image):
+    model.eval()
+    with torch.no_grad():
+        outputs = model(image)
+        _, predicted = torch.max(outputs.data, 1)
+    return predicted
 
 if __name__ == '__main__':
     input_size = 784
     hidden_size = 500
     output_size = 10
     model_path = '../../weights/model.pth'
-    image_path = '../../uploads/test.png'
+    image_path = '../../uploads/img.png'
 
     # 加载模型
     model = NN(input_size, hidden_size, output_size)
     model.load_state_dict(torch.load(model_path, weights_only=True))
     print(model)
+
+    # 加载图片
+    image = load_image(image_path)
+    print(image.shape)
+
+    # 预测
+    predicted = predict(model, image)
+    print(predicted)
