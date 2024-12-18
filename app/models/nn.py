@@ -17,35 +17,25 @@ class NN(nn.Module):
         out = self.fc2(out)
         return out
 
+    def predict(self, image):
+        self.eval()
+        with torch.no_grad():
+            outputs = self.forward(image)
+            _, predicted = torch.max(outputs.data, 1)
+        return predicted
+
 transform = transforms.Compose([
     transforms.Grayscale(),
     transforms.Resize((28, 28)),
     transforms.ToTensor(),
 ])
 
-def load_image(image_path):
-    image = Image.open(image_path)
-    # plt.imshow(image)
-    # plt.show()
-
-    image = transform(image)
-    image = image.view(1, -1)
-
-    return image
-
-def predict(model, image):
-    model.eval()
-    with torch.no_grad():
-        outputs = model(image)
-        _, predicted = torch.max(outputs.data, 1)
-    return predicted
-
 if __name__ == '__main__':
     input_size = 784
     hidden_size = 500
     output_size = 10
     model_path = '../../weights/model.pth'
-    image_path = '../../uploads/img.png'
+    image_path = '../../temp/img.png'
 
     # 加载模型
     model = NN(input_size, hidden_size, output_size)
@@ -53,9 +43,14 @@ if __name__ == '__main__':
     print(model)
 
     # 加载图片
-    image = load_image(image_path)
+    image = Image.open(image_path)
+    # plt.imshow(image)
+    # plt.show()
+
+    image = transform(image)
+    image = image.view(1, -1)
     print(image.shape)
 
     # 预测
-    predicted = predict(model, image)
+    predicted = model.predict(image)
     print(predicted)
