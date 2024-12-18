@@ -3,9 +3,9 @@ let clearBtn = document.getElementById("clear") as HTMLButtonElement;
 let submitBtn = document.getElementById("submit") as HTMLButtonElement;
 let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
+// 设置画布大小
 let width = canvas.clientWidth;
 let height = canvas.clientHeight;
-
 canvas.width = width
 canvas.height = height
 
@@ -13,10 +13,19 @@ canvas.height = height
 let offsetX = canvas.getBoundingClientRect().left;
 let offsetY = canvas.getBoundingClientRect().top;
 
+// 绘图状态
 let drawing = false;
 let erasing = false;
 
+// 上一个点的位置
 let prevPos = { x: -1, y: -1 };
+
+// 画笔
+let lineWidth = 50;
+let brushColor = "#000";
+let backgroundColor = "#fff";
+
+reset();
 
 // 鼠标按下事件
 canvas.onmousedown = (e) => {
@@ -25,7 +34,7 @@ canvas.onmousedown = (e) => {
     let y = e.clientY - offsetY;
     prevPos = { x, y };
     console.log("鼠标按下", x, y);
-    drawCircle(x, y, 5);
+    drawCircle(x, y, lineWidth / 2);
 };
 
 // 鼠标移动事件
@@ -49,6 +58,7 @@ canvas.onmouseup = () => {
 // 画圆
 function drawCircle(x: number, y: number, r: number) {
     ctx.save();
+    ctx.fillStyle = brushColor;
     ctx.beginPath();
     ctx.arc(x, y, r, 0, 2 * Math.PI);
     ctx.fill();
@@ -58,40 +68,23 @@ function drawCircle(x: number, y: number, r: number) {
 function drawLine(x1: number, y1: number, x2: number, y2: number) {
     ctx.save();
     ctx.beginPath();
-    ctx.lineWidth = 10;
+    ctx.strokeStyle = brushColor;
+    ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
     ctx.stroke();
-    ctx.closePath();
 }
 
+function reset() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, width, height);
+}
+
+// 清空画布
 clearBtn.onclick = () => {
-    console.log("清空画布", offsetX, offsetY, offsetX + width, offsetY + height);
-    ctx.clearRect(offsetX, offsetY, offsetX + width, offsetY + height);
-}
-
-submitBtn.onclick = () => {
-    console.log("提交画布");
-    canvas.toBlob((blob) => {
-        if (blob) {
-            let formData = new FormData();
-            formData.append("file", blob, "draw.png");
-            fetch("/recognize", {
-                method: "POST",
-                body: formData
-            }).then(res => res.json())
-                .then((data) => {
-                    console.log(data);
-                    if (data["code"] === 1) {
-                        alert("识别结果：" + data["data"]);
-                    } else {
-                        alert("识别失败：" + data["msg"]);
-                    }
-                }).catch((err) => {
-                    alert("识别失败：" + err);
-            });
-        }
-    }, "image/png");
+    console.log("清空画布",  width, height);
+    reset();
 }

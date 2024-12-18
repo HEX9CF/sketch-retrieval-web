@@ -21,6 +21,7 @@ class NN(nn.Module):
         self.eval()
         with torch.no_grad():
             outputs = self.forward(image)
+            # print(outputs)
             _, predicted = torch.max(outputs.data, 1)
         return predicted
 
@@ -28,6 +29,7 @@ transform = transforms.Compose([
     transforms.Grayscale(),
     transforms.Resize((28, 28)),
     transforms.ToTensor(),
+    transforms.Lambda(lambda x: 1 - x)
 ])
 
 if __name__ == '__main__':
