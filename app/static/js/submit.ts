@@ -1,4 +1,9 @@
+declare var bootstrap: any;
 let submitBtn = document.getElementById("submit") as HTMLButtonElement;
+let toastElem = document.getElementById("toast") as HTMLDivElement;
+let toastBody = document.getElementById("toast-body") as HTMLDivElement;
+let toastTitle = document.getElementById("toast-title") as HTMLDivElement;
+let toast = new bootstrap.Toast(toastElem);
 
 // 提交画布
 submitBtn.onclick = () => {
@@ -15,13 +20,23 @@ submitBtn.onclick = () => {
                 .then((data) => {
                     console.log(data);
                     if (data["code"] === 1) {
-                        alert("识别结果：" + data["data"]);
+                        // alert("识别结果：" + data["data"]);
+                        showToast("识别结果", data["data"]);
                     } else {
-                        alert("识别失败：" + data["msg"]);
+                        // alert("识别失败：" + data["msg"]);
+                        showToast("识别失败", data["msg"]);
                     }
                 }).catch((err) => {
-                alert("识别失败：" + err);
+                // alert("识别失败：" + err);
+                showToast("识别失败", err);
             });
         }
     }, "image/png");
+}
+
+function showToast(title: string, msg: string) {
+    console.log("Toast", title, msg);
+    toastTitle.innerText = title;
+    toastBody.innerText = msg;
+    toast.show();
 }
