@@ -21,7 +21,7 @@ submitBtn.onclick = () => {
                     console.log(data);
                     if (data["code"] === 1) {
                         // alert("识别结果：" + data["data"]);
-                        showToast("识别结果", data["data"]);
+                        showToast("识别结果", '<h1>' + data["data"] + '</h1>');
                     } else {
                         // alert("识别失败：" + data["msg"]);
                         showToast("识别失败", data["msg"]);
@@ -36,7 +36,7 @@ submitBtn.onclick = () => {
 
 function showToast(title: string, msg: string) {
     console.log("Toast", title, msg);
-    toastTitle.innerText = title;
-    toastBody.innerText = msg;
+    toastTitle.innerHTML = title;
+    toastBody.innerHTML = msg;
     toast.show();
 }
