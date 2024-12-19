@@ -17,26 +17,37 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-                <canvas id="draw"></canvas>
+                <div class="card-body">
+                    <canvas id="draw"></canvas>
+                </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-check form-switch">
-                <label class="form-check-label" for="eraser">橡皮擦</label>
-                <input class="form-check-input" type="checkbox" id="eraser">
-            </div>
-            <br/>
-            <div>
-                <label for="brushColor">画笔颜色</label>
-                <input type="color" id="brush-color" value="#000000">
-                <br/>
-                <label for="backgroundColor">背景颜色</label>
-                <input type="color" id="background-color" value="#ffffff">
-            </div>
-            <br/>
-            <div>
-                <button id="clear" class="btn btn-secondary">清空</button>
-                <button id="submit" class="btn btn-primary">提交</button>
+            <div class="card">
+                <div class="card-body">
+                    <div>
+                        <label for="brush-size" class="form-label">笔刷大小</label>
+                        <input type="range" class="form-range" min="0" max="100" id="brush-size">
+                    </div>
+                    <br/>
+                    <div class="form-check form-switch">
+                        <label class="form-check-label" for="eraser">橡皮擦</label>
+                        <input class="form-check-input" type="checkbox" id="eraser">
+                    </div>
+                    <br/>
+                    <div>
+                        <label for="brushColor">画笔颜色</label>
+                        <input type="color" class="form-control form-control-color" id="brush-color" value="#000000">
+                        <br/>
+                        <label for="backgroundColor">背景颜色</label>
+                        <input type="color" class="form-control form-control-color" id="background-color" value="#ffffff">
+                    </div>
+                    <br/>
+                    <div>
+                        <button id="clear" class="btn btn-secondary">清空</button>
+                        <button id="submit" class="btn btn-primary">提交</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

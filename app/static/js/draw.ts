@@ -5,6 +5,7 @@ let submitBtn = document.getElementById("submit") as HTMLButtonElement;
 let eraserCb = document.getElementById("eraser") as HTMLInputElement;
 let brushColorInput = document.getElementById("brush-color") as HTMLInputElement;
 let backgroundColorInput = document.getElementById("background-color") as HTMLInputElement;
+let brushSizeInput = document.getElementById("brush-size") as HTMLInputElement;
 
 // 设置画布大小
 let width = canvas.clientWidth;
@@ -123,4 +124,14 @@ brushColorInput.onchange = () => {
 backgroundColorInput.onchange = () => {
     console.log("背景颜色", backgroundColorInput.value);
     backgroundColor = backgroundColorInput.value;
+}
+
+// 笔刷大小
+brushSizeInput.onchange = () => {
+    let percent = parseInt(brushSizeInput.value);
+    lineWidth = (width + height) * percent / 1000;
+    if (lineWidth < 1) {
+        lineWidth = 1;
+    }
+    console.log("笔刷大小", brushSizeInput.value, lineWidth);
 }
