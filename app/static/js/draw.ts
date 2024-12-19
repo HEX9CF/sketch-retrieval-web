@@ -1,8 +1,10 @@
 let canvas = document.getElementById("draw") as HTMLCanvasElement;
+let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 let clearBtn = document.getElementById("clear") as HTMLButtonElement;
 let submitBtn = document.getElementById("submit") as HTMLButtonElement;
 let eraserCb = document.getElementById("eraser") as HTMLInputElement;
-let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+let brushColorInput = document.getElementById("brush-color") as HTMLInputElement;
+let backgroundColorInput = document.getElementById("background-color") as HTMLInputElement;
 
 // 设置画布大小
 let width = canvas.clientWidth;
@@ -108,4 +110,17 @@ eraserCb.onchange = () => {
     console.log("橡皮擦", eraserCb.checked);
     erasing = eraserCb.checked;
     styleColor = erasing ? backgroundColor : brushColor;
+}
+
+// 笔刷颜色
+brushColorInput.onchange = () => {
+    console.log("笔刷颜色", brushColorInput.value);
+    brushColor = brushColorInput.value;
+    styleColor = erasing ? backgroundColor : brushColor;
+}
+
+// 背景颜色
+backgroundColorInput.onchange = () => {
+    console.log("背景颜色", backgroundColorInput.value);
+    backgroundColor = backgroundColorInput.value;
 }
