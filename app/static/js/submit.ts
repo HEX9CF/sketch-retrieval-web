@@ -1,3 +1,6 @@
+let submitBtn = document.getElementById("submit") as HTMLButtonElement;
+
+// 提交画布
 submitBtn.onclick = () => {
     console.log("提交画布");
     canvas.toBlob((blob) => {
