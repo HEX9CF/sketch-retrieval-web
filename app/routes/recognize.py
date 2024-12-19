@@ -1,6 +1,5 @@
 from io import BytesIO
 
-import numpy as np
 from PIL import Image
 from flask import request, jsonify
 import torch

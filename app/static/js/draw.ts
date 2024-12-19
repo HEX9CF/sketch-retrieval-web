@@ -1,6 +1,7 @@
 let canvas = document.getElementById("draw") as HTMLCanvasElement;
 let clearBtn = document.getElementById("clear") as HTMLButtonElement;
 let submitBtn = document.getElementById("submit") as HTMLButtonElement;
+let eraserCb = document.getElementById("eraser") as HTMLInputElement;
 let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
 // 设置画布大小
@@ -21,11 +22,22 @@ let erasing = false;
 let prevPos = { x: -1, y: -1 };
 
 // 画笔
-let lineWidth = 50;
+let lineWidth = (width + height) / 20;
 let brushColor = "#000";
 let backgroundColor = "#fff";
+let styleColor = brushColor;
 
-reset();
+window.onresize = () => {
+    console.log("窗口大小改变");
+    width = canvas.clientWidth;
+    height = canvas.clientHeight;
+    canvas.width = width
+    canvas.height = height
+    offsetX = canvas.getBoundingClientRect().left;
+    offsetY = canvas.getBoundingClientRect().top;
+    lineWidth = (width + height) / 20;
+    reset()
+}
 
 // 鼠标按下事件
 canvas.onmousedown = (e) => {
@@ -58,7 +70,7 @@ canvas.onmouseup = () => {
 // 画圆
 function drawCircle(x: number, y: number, r: number) {
     ctx.save();
-    ctx.fillStyle = brushColor;
+    ctx.fillStyle = styleColor;
     ctx.beginPath();
     ctx.arc(x, y, r, 0, 2 * Math.PI);
     ctx.fill();
@@ -68,7 +80,7 @@ function drawCircle(x: number, y: number, r: number) {
 function drawLine(x1: number, y1: number, x2: number, y2: number) {
     ctx.save();
     ctx.beginPath();
-    ctx.strokeStyle = brushColor;
+    ctx.strokeStyle = styleColor;
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -78,13 +90,22 @@ function drawLine(x1: number, y1: number, x2: number, y2: number) {
 }
 
 function reset() {
+    console.log("重置画布", width, height);
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = backgroundColor;
     ctx.fillRect(0, 0, width, height);
 }
+reset();
 
 // 清空画布
 clearBtn.onclick = () => {
     console.log("清空画布",  width, height);
     reset();
+}
+
+// 橡皮擦
+eraserCb.onchange = () => {
+    console.log("橡皮擦", eraserCb.checked);
+    erasing = eraserCb.checked;
+    styleColor = erasing ? backgroundColor : brushColor;
 }
