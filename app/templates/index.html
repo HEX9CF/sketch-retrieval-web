@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>手写数字识别</title>
+    <title>手绘图像检索</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
@@ -10,7 +10,12 @@
 <body>
 <div class="container pt-4">
     <div class="row">
-        <h1>MNIST 手写数字识别</h1>
+        <div class="col-md-3">
+            <h1>手绘图像检索</h1>
+        </div>
+        <div class="col-md-9">
+
+        </div>
     </div>
     <hr>
     <div class="row">
@@ -24,35 +29,45 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <div>
-                        <label for="brush-size" class="form-label">笔刷大小</label>
-                        <input type="range" class="form-range" min="0" max="100" id="brush-size">
-                    </div>
-                    <br/>
-                    <div class="form-check form-switch">
-                        <label class="form-check-label" for="eraser">橡皮擦</label>
-                        <input class="form-check-input" type="checkbox" id="eraser">
-                    </div>
-                    <br/>
-                    <div>
-                        <label for="brushColor">画笔颜色</label>
-                        <input type="color" class="form-control form-control-color" id="brush-color" value="#000000">
-                        <br/>
-                        <label for="backgroundColor">背景颜色</label>
-                        <input type="color" class="form-control form-control-color" id="background-color" value="#ffffff">
-                    </div>
-                    <br/>
-                    <div>
-                        <button id="clear" class="btn btn-secondary">清空</button>
-                        <button id="submit" class="btn btn-primary">识别</button>
-                    </div>
-                    <br/>
-                    <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header">
-                            <div id="toast-title" style="font-weight: bold"></div>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>画板设置</h5>
                         </div>
-                        <div class="toast-body" id="toast-body"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="brush-size">笔刷大小</label>
+                            <input type="range" class="form-range" min="0" max="100" id="brush-size">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="brush-color">画笔颜色</label>
+                            <input type="color" class="form-control-color" id="brush-color" value="#000000">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="background-color">背景颜色</label>
+                            <input type="color" class="form-control-color" id="background-color" value="#ffffff">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-check form-switch">
+                                <label for="eraser">橡皮擦</label>
+                                <input class="form-check-input" type="checkbox" id="eraser">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button id="clear" class="btn btn-secondary">清空</button>
+                            <button id="submit" class="btn btn-primary">检索</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="card">
+                <div class="card-body">
+                    <div>
+                        <h5>检索结果</h5>
+                        <div id="result"></div>
                     </div>
                 </div>
             </div>
@@ -68,9 +83,19 @@
 </div>
 #}
 </div>
+<div class="position-fixed bottom-0 end-0 p-3">
+    <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <div id="toast-title" style="font-weight: bold"></div>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toast-body"></div>
+    </div>
+</div>
 </body>
 <script src="{{ url_for('static', filename='js/canvas.js') }}"></script>
 <script src="{{ url_for('static', filename='js/draw.js') }}"></script>
 <script src="{{ url_for('static', filename='js/setting.js') }}"></script>
 <script src="{{ url_for('static', filename='js/submit.js') }}"></script>
+<script src="{{ url_for('static', filename='js/result.js') }}"></script>
 </html>

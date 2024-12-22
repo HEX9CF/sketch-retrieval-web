@@ -3,3 +3,11 @@
     height: 500px;
     border: #000 1px solid;
 }
+
+#result {
+    width: 100%
+}
+
+#result img {
+    border: #000 1px solid;
+}

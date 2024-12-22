@@ -20,15 +20,16 @@ submitBtn.onclick = () => {
                 .then((data) => {
                     console.log(data);
                     if (data["code"] === 1) {
-                        // alert("识别结果：" + data["data"]);
-                        showToast("识别结果", '<h1>' + data["data"] + '</h1>');
+                        // alert("检索结果：" + data["data"]);
+                        display_retrieval(data["data"])
+                        showToast("检索结果", `<h3>检索成功</h3>`);
                     } else {
-                        // alert("识别失败：" + data["msg"]);
-                        showToast("识别失败", data["msg"]);
+                        // alert("检索失败：" + data["msg"]);
+                        showToast("检索失败", data["msg"]);
                     }
                 }).catch((err) => {
-                // alert("识别失败：" + err);
-                showToast("识别失败", err);
+                // alert("检索失败：" + err);
+                showToast("检索失败", err);
             });
         }
     }, "image/png");
