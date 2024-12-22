@@ -24,7 +24,8 @@
 
 ## 网络图
 
-### VGG16
+<details>
+<summary>VGG16</summary>
 
 ```mermaid
 graph TD
@@ -70,3 +71,4 @@ graph TD
     AN --> AO[全连接层 Linear 4096, 1000]
     AO --> AP[输出]
 ```
+</details>
