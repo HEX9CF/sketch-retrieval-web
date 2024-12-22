@@ -13,7 +13,7 @@ submitBtn.onclick = () => {
             let formData = new FormData();
             formData.append("file", blob, "draw.png");
             console.log(blob)
-            fetch("/api/recognize", {
+            fetch("/api/retrieve", {
                 method: "POST",
                 body: formData
             }).then(res => res.json())

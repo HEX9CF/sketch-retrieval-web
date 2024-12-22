@@ -8,8 +8,8 @@ from app import app
 from app.models.resp import Resp
 from app.models.vgg16 import transform, load_model, extract_feature, retrieve_images, show_retrieval
 
-@app.route('/api/recognize', methods=['POST'])
-def recognize():
+@app.route('/api/retrieve', methods=['POST'])
+def retrieve():
     file = request.files.get('file')
     if file:
         print('上传文件:', file.filename)
