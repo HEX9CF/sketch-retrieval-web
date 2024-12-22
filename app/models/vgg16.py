@@ -1,16 +1,15 @@
+import os
+import pickle
+
+import numpy as np
+import torch
 import torch.nn as nn
-import torch.utils.model_zoo as model_zoo
 import math
+from PIL import Image
+from matplotlib import pyplot as plt
 
-__all__ = [
-    'VGG', 'vgg16',
-]
-
-
-model_urls = {
-    'vgg16': 'https://download.pytorch.org/models/vgg16-397923af.pth',
-}
-
+from sklearn.neighbors import NearestNeighbors
+from torchvision.transforms import transforms
 
 class VGG(nn.Module):
 
@@ -78,18 +77,91 @@ cfg = {
     'E': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 256, 'M', 512, 512, 512, 512, 'M', 512, 512, 512, 512, 'M'],
 }
 
+SKETCH_VGG = '../../data/model/sketch_vgg16_5.pth'
 
-def vgg16(pretrained=False, **kwargs):
-    """VGG 16-layer model (configuration "D")
+PHOTO_ROOT = '../../data/'
 
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-    """
-    if pretrained:
-        kwargs['init_weights'] = False
-    model = VGG(make_layers(cfg['D']), **kwargs)
-    if pretrained:
-        model.load_state_dict(model_zoo.load_url(model_urls['vgg16']))
+photo_data = pickle.load(open('../../data/feature/photo-vgg16-5.pkl', 'rb'))
+photo_feature = photo_data['feature']
+photo_name = photo_data['name']
+
+nbrs = NearestNeighbors(n_neighbors=np.size(photo_feature, 0),
+                        algorithm='brute', metric='euclidean').fit(photo_feature)
+
+transform = transforms.Compose([
+    transforms.Resize(224),
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+])
+
+# 加载模型
+def load_model():
+    model = VGG(make_layers(cfg['D']))
+    model.classifier[6] = nn.Linear(in_features=4096, out_features=125, bias=True)
+    model.load_state_dict(torch.load(SKETCH_VGG, map_location=torch.device('cpu'), weights_only=True), strict=False)
     return model
+
+# 提取特征
+def extract_feature(model, image):
+    model.eval()
+    with torch.no_grad():
+        output = model(image)
+
+    feature = output[1].squeeze().numpy()
+
+    return feature
+
+# 检索图片
+def retrieve_images(feature, num):
+    retrieval_images = []
+    feature = np.reshape(feature, [1, np.shape(feature)[0]])
+    distances, indices = nbrs.kneighbors(feature)
+
+    for i, idx in enumerate(indices[0][:num]):
+        retrieval_name = photo_name[idx]
+        print(i, retrieval_name)
+        retrieval_image = Image.open(os.path.join(PHOTO_ROOT, retrieval_name)).convert('RGB')
+        retrieval_images.append(retrieval_image)
+
+    return retrieval_images
+
+# 展示检索结果
+def show_retrieval(sketch, photos):
+    num = len(photos)
+    plt.subplot(1, num + 1, 1)
+    plt.title('sketch')
+    plt.imshow(sketch)
+
+    for i, photo in enumerate(photos):
+        plt.subplot(1, num + 1, i + 2)
+        plt.imshow(photo)
+        plt.title(f'photo{i + 1}')
+
+    plt.axis('off')
+    plt.show()
+
+if __name__ == '__main__':
+    test_image_path = '../../data/test.png'
+
+    # 加载图片
+    test_image = Image.open(test_image_path)
+
+    # 图片预处理
+    test_image = transform(test_image)
+    test_image = test_image.unsqueeze(0)
+
+    model = load_model()
+    feature = extract_feature(model, test_image)
+    retrievals = retrieve_images(feature, 5)
+
+    test_image = Image.open(test_image_path)
+    show_retrieval(test_image, retrievals)
+
+
+
+
+
+
+
 
 
