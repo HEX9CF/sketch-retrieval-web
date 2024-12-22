@@ -135,7 +135,6 @@ def show_retrieval(sketch, photos):
         plt.imshow(photo)
         plt.title(f'photo{i + 1}')
 
-    plt.axis('off')
     plt.show()
 
 if __name__ == '__main__':
