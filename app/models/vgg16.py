@@ -87,7 +87,7 @@ nbrs = NearestNeighbors(n_neighbors=np.size(photo_feature, 0),
                         algorithm='brute', metric='euclidean').fit(photo_feature)
 
 transform = transforms.Compose([
-    transforms.Resize(224),
+    transforms.Resize((224, 224)),
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
