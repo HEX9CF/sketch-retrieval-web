@@ -1,4 +1,3 @@
-import os
 import pickle
 
 import numpy as np
@@ -10,6 +9,9 @@ from matplotlib import pyplot as plt
 
 from sklearn.neighbors import NearestNeighbors
 from torchvision.transforms import transforms
+
+from app.config import *
+
 
 class VGG(nn.Module):
 
@@ -77,11 +79,7 @@ cfg = {
     'E': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 256, 'M', 512, 512, 512, 512, 'M', 512, 512, 512, 512, 'M'],
 }
 
-SKETCH_VGG = '../../data/model/sketch_vgg16_5.pth'
-
-PHOTO_ROOT = '../../data/'
-
-photo_data = pickle.load(open('../../data/feature/photo-vgg16-5.pkl', 'rb'))
+photo_data = pickle.load(open(PHOTO_FEATURE, 'rb'))
 photo_feature = photo_data['feature']
 photo_name = photo_data['name']
 
@@ -120,7 +118,7 @@ def retrieve_images(feature, num):
     for i, idx in enumerate(indices[0][:num]):
         retrieval_name = photo_name[idx]
         print(i, retrieval_name)
-        retrieval_image = Image.open(os.path.join(PHOTO_ROOT, retrieval_name)).convert('RGB')
+        retrieval_image = Image.open(os.path.join(DATA_ROOT, retrieval_name)).convert('RGB')
         retrieval_images.append(retrieval_image)
 
     return retrieval_images
