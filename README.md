@@ -63,7 +63,7 @@ graph TD
 
 ## 模型
 
-项目使用的模型来自 [SketchyDatabase](https://github.com/CDOTAD/SketchyDatabase) ，此项目基于 MIT license 协议开源，是《[The Sketchy Database: Learning to Retrieve Badly Drawn Bunnies](https://www.cc.gatech.edu/~hays/tmp/sketchy-database.pdf)》的复现。感谢原作者 **CDOTAD** 的工作和开源精神。
+项目使用的模型来自 [SketchyDatabase](https://github.com/CDOTAD/SketchyDatabase) ，此项目基于 MIT license 协议开源，是《The Sketchy Database: Learning to Retrieve Badly Drawn Bunnies》的复现。感谢原作者 **CDOTAD** 的工作和开源精神。
 
 本项目需要使用图片数据集的特征文件。图片的特征文件需要使用 SketchyDatabase 项目的 `feature_extract.py` 提取，将提取的特征文件 `photo-vgg16.pkl` 放到 `data/feature` 目录下，然后修改 `config.py` 文件中的 `PHOTO_FEATURE` 变量即可。
 
